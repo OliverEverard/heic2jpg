@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Oli Everard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8368997072131126"
+     crossorigin="anonymous"></script>
+     <link rel="icon" type="image/x-icon" href="https://www.olieverard.co.uk/src/favicon.ico">
+  </head>
+
+  <body class="bg-white">
+    <div id="navbar-container"></div>
+
+    <script>
+
+      fetch('https://www.olieverard.co.uk/components/navbar.html')
+        .then(response => response.text())
+        .then(html => {
+          document.querySelector('#navbar-container').innerHTML = html;
+        });
+    </script>
+
+    
+
+
+
+<section class="text-gray-600 body-font">
+  <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
+    <div class="text-center lg:w-2/3 w-full">
+      <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">heic2jpg Converter</h1>
+      <p class="mb-8 leading-relaxed">Please upload a HEIC image file, and a it will be converted to a JPG for you. All of this is done client side, there's no uploading of your images to the internet! Please note this tool does not copy image metadata over.</p>
+      <div class="flex justify-center">
+          <form>
+              <input class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg" type="file" accept="image/*">
+              <button type="submit" class="inline-flex text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded text-lg">Convert</button>
+            </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <script>
+    const form = document.querySelector('form');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const file = event.target.querySelector('input[type="file"]').files[0];
+      const canvas = document.createElement('canvas');
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onload = async () => {
+        const zip = new JSZip();
+        const sizes = [16, 24, 32, 48, 64];
+        for (const size of sizes) {
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, size, size);
+          const icoDataUrl = canvas.toDataURL('image/x-icon');
+          const icoBlob = await (await fetch(icoDataUrl)).blob();
+          zip.file(`favicon-${size}.ico`, icoBlob);
+        }
+        const zipBlob = await zip.generateAsync({type: 'blob'});
+        saveAs(zipBlob, 'favicon.zip');
+      };
+    });
+  </script>
+
+    </body>
+
+</html>
+  
