@@ -40,79 +40,84 @@
   </div>
 </section>
 
-  <script>
+<script>
 
-const form = document.querySelector('form');
-const input = form.querySelector('input[type="file"]');
-const convertButton = form.querySelector('button[type="submit"]');
-const processingMessage = document.createElement('div');
-processingMessage.innerText = 'Processing... This may take a while. File will download automatically.';
-processingMessage.style.display = 'none';
-processingMessage.classList.add('text-blue-500');
-form.appendChild(processingMessage);
-
-function convertHEICtoJPG(blob) {
-  processingMessage.style.display = 'block';
-  return heic2any({
-    blob: blob,
-    toType: 'image/jpeg',
-    quality: 0.8
-  }).then((output) => {
-    const outputBlob = new Blob([output], {type: 'image/jpeg'});
-    const outputUrl = URL.createObjectURL(outputBlob);
-    const link = document.createElement('a');
-    link.href = outputUrl;
-    link.download = blob.name.replace(/\.heic$/i, '.jpg');
-    link.click();
-    processingMessage.style.display = 'none';
-  });
-}
-
-function convertZipToJPG(zipFile) {
-  processingMessage.style.display = 'block';
-  return JSZip.loadAsync(zipFile).then(async (zip) => {
-    const jpgZip = new JSZip();
-
-    await Promise.all(Object.keys(zip.files).map(async (filename) => {
-      const file = zip.files[filename];
-      if (!file.dir && file.name.endsWith('.heic')) {
-        const output = await heic2any({
-          blob: await file.async('blob'),
-          toType: 'image/jpeg',
-          quality: 0.8
-        });
-        jpgZip.file(file.name.replace(/\.heic$/i, '.jpg'), output);
-      }
-    }));
-
-    const jpgZipBlob = await jpgZip.generateAsync({type:"blob"});
-    const jpgZipUrl = URL.createObjectURL(jpgZipBlob);
-    const link = document.createElement('a');
-    link.href = jpgZipUrl;
-    link.download = zipFile.name.replace(/\.zip$/i, '_jpg.zip');
-    link.click();
-    processingMessage.style.display = 'none';
-  });
-}
-
-convertButton.addEventListener('click', async (event) => {
-  event.preventDefault();
-  const file = input.files[0];
-  if (!file) return;
-  if (file.name.endsWith('.heic')) {
-    await convertHEICtoJPG(file);
-  } else if (file.name.endsWith('.zip')) {
-    await convertZipToJPG(file);
+  const form = document.querySelector('form');
+  const input = form.querySelector('input[type="file"]');
+  const convertButton = form.querySelector('button[type="submit"]');
+  const processingMessage = document.createElement('div');
+  processingMessage.innerText = 'Processing... This may take a while. File will download automatically. Images processed so far: 0';
+  processingMessage.style.display = 'none';
+  processingMessage.classList.add('text-blue-500');
+  form.appendChild(processingMessage);
+  
+  let imageCount = 0;
+  
+  function convertHEICtoJPG(blob) {
+    processingMessage.style.display = 'block';
+    return heic2any({
+      blob: blob,
+      toType: 'image/jpeg',
+      quality: 0.8
+    }).then((output) => {
+      const outputBlob = new Blob([output], {type: 'image/jpeg'});
+      const outputUrl = URL.createObjectURL(outputBlob);
+      const link = document.createElement('a');
+      link.href = outputUrl;
+      link.download = blob.name.replace(/\.heic$/i, '.jpg');
+      link.click();
+      imageCount++;
+      processingMessage.innerText = `Processing... This may take a while. File will download automatically. Images processed so far: ${imageCount}`;
+      processingMessage.style.display = 'none';
+    });
   }
-});
-
-input.addEventListener('change', () => {
-  convertButton.disabled = !input.value;
-});
-
-
-
+  
+  function convertZipToJPG(zipFile) {
+    processingMessage.style.display = 'block';
+    return JSZip.loadAsync(zipFile).then(async (zip) => {
+      const jpgZip = new JSZip();
+  
+      await Promise.all(Object.keys(zip.files).map(async (filename) => {
+        const file = zip.files[filename];
+        if (!file.dir && file.name.endsWith('.heic')) {
+          const output = await heic2any({
+            blob: await file.async('blob'),
+            toType: 'image/jpeg',
+            quality: 0.8
+          });
+          jpgZip.file(file.name.replace(/\.heic$/i, '.jpg'), output);
+          imageCount++;
+        }
+      }));
+  
+      const jpgZipBlob = await jpgZip.generateAsync({type:"blob"});
+      const jpgZipUrl = URL.createObjectURL(jpgZipBlob);
+      const link = document.createElement('a');
+      link.href = jpgZipUrl;
+      link.download = zipFile.name.replace(/\.zip$/i, '_jpg.zip');
+      link.click();
+      processingMessage.innerText = `Processing... This may take a while. File will download automatically. Images processed so far: ${imageCount}`;
+      processingMessage.style.display = 'none';
+    });
+  }
+  
+  convertButton.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const file = input.files[0];
+    if (!file) return;
+    if (file.name.endsWith('.heic')) {
+      await convertHEICtoJPG(file);
+    } else if (file.name.endsWith('.zip')) {
+      await convertZipToJPG(file);
+    }
+  });
+  
+  input.addEventListener('change', () => {
+    convertButton.disabled = !input.value;
+  });
+  
   </script>
+  
 
     </body>
 
