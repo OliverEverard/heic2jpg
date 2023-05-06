@@ -33,8 +33,8 @@
       <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">heic2jpg Converter</h1>
       <p class="mb-8 leading-relaxed">Please upload a HEIC image file, or a zip file containing multiple HEIC images, and they will be converted to JPGs for you. All of this is done client side, there's no uploading of your images to the internet! Please note this tool does not copy image metadata over. It also may take a long time for multiple images.</p>
       <form>
-        <input class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg" type="file" accept=".heic, .zip">
-        <button type="submit" class="inline-flex text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded text-lg">Convert</button>
+        <input class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg my-4" type="file" accept=".heic, .zip">
+        <button type="submit" class="inline-flex text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded text-lg my-4">Convert</button>
       </form>
     </div>
   </div>
@@ -42,13 +42,17 @@
 
   <script>
 
-
-//File submit 
 const form = document.querySelector('form');
 const input = form.querySelector('input[type="file"]');
 const convertButton = form.querySelector('button[type="submit"]');
+const processingMessage = document.createElement('div');
+processingMessage.innerText = 'Processing... This may take a while. File will download automatically.';
+processingMessage.style.display = 'none';
+processingMessage.classList.add('text-blue-500');
+form.appendChild(processingMessage);
 
 function convertHEICtoJPG(blob) {
+  processingMessage.style.display = 'block';
   return heic2any({
     blob: blob,
     toType: 'image/jpeg',
@@ -60,10 +64,12 @@ function convertHEICtoJPG(blob) {
     link.href = outputUrl;
     link.download = blob.name.replace(/\.heic$/i, '.jpg');
     link.click();
+    processingMessage.style.display = 'none';
   });
 }
 
 function convertZipToJPG(zipFile) {
+  processingMessage.style.display = 'block';
   return JSZip.loadAsync(zipFile).then(async (zip) => {
     const jpgZip = new JSZip();
 
@@ -85,6 +91,7 @@ function convertZipToJPG(zipFile) {
     link.href = jpgZipUrl;
     link.download = zipFile.name.replace(/\.zip$/i, '_jpg.zip');
     link.click();
+    processingMessage.style.display = 'none';
   });
 }
 
