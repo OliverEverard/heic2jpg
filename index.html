@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>HEIC2JPG | Oli Everard</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -9,6 +9,7 @@
      <link rel="icon" type="image/x-icon" href="https://www.olieverard.co.uk/src/favicon.ico">
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
      <meta name="viewport" content="width=device-width">
+     <meta name="description" content="Bulk HEIC2JPG Converter | No Uploading to Internet | Private and Secure"> 
 
   </head>
 
@@ -24,19 +25,24 @@
         });
     </script>
 
-    
-
-
 
 <section class="text-gray-600 body-font">
   <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
     <div class="text-center lg:w-2/3 w-full">
-      <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">heic2jpg Converter</h1>
-      <p class="mb-8 leading-relaxed">Please upload a HEIC image file, or a zip file containing multiple HEIC images, and they will be converted to JPGs for you. All of this is done client side, there's no uploading of your images to the internet! Please note this tool does not copy image metadata over. It also may take a long time for multiple images.</p>
+      <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">Offline HEIC2JPG Converter</h1>
+      <p class="mb-8 leading-relaxed">To use the HEIC2JPG Converter, please submit a HEIC image file, or a zip file containing multiple HEIC images, and they will be converted to JPGs for you. All of this is done client side, there's no uploading of your images to the internet! Please note this tool does not copy image metadata over. It also may take a long time for multiple images.</p>
       <form>
         <input class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg my-4" type="file" accept=".heic, .zip">
         <button type="submit" class="inline-flex text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded text-lg my-4">Convert</button>
       </form>
+      <p class="mb-8 leading-relaxed">You need an internet connection to access this site, but the files you submit never leave your computer. The tool handles the files completley offline, ensuring that your images remain private and secure.
+      </p>
+      <p class="mb-8 leading-relaxed">Because of this, it may take a while to process a large amount of images. Please note you must keep the tab as the active window on your computer, or the conversion may pause. I have added a progress indicator so you can tell how many images have already been processed by the tool. I tested converting a few hundred images, and it successfully processed them all eventually.  
+      </p>
+      <p class="mb-8 leading-relaxed my-4">Most HEIC conversion tools have a limit on the amount of files that you can convert in one go, but this one does not. This is because most other tools pass the images to an external server, but this one handles them on your device. I try to build all <a href="https://www.olieverard.co.uk/tools">my tools</a> this way, to ensure privacy, security, and simplicity. 
+      </p>
+      <p class="mb-8 leading-relaxed"> If you wish to see the code yourself, please go to <a href="https://www.olieverard.co.uk/repositories"> My GitHub Repositories Page</a> and view the source code for yourself. 
+      </p>
     </div>
   </div>
 </section>
