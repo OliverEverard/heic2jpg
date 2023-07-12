@@ -96,7 +96,7 @@ function updateProcessingMessage() {
   
       await Promise.all(Object.keys(zip.files).map(async (filename) => {
         const file = zip.files[filename];
-        if (!file.dir && file.name.endsWith('.heic')) {
+        if (!file.dir && (file.name.endsWith('.heic') || file.name.endsWith('.HEIC'))) {
           const output = await heic2any({
             blob: await file.async('blob'),
             toType: 'image/jpeg',
